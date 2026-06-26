@@ -11,7 +11,7 @@ jobs:
 
     - name: Run macOS Container
       run: |
-        docker run -d --name macos -p 8006:8006 --device=/dev/kvm --cap-add=NET_ADMIN -e DISK_SIZE=50G dockur/macos
+        docker run -d --name macos -p 8006:8006 --device=/dev/kvm --cap-add=NET_ADMIN -e DISK_SIZE=50G dockurr/macos
         sudo apt-get update && sudo apt-get install tmate -y
         tmate -S /tmp/tmate.sock new-session -d
         tmate -S /tmp/tmate.sock wait tmate-ready
