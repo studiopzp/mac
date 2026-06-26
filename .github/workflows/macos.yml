@@ -11,11 +11,15 @@ jobs:
 
     - name: Run macOS Container
       run: |
+        # 1. Uruchomienie macOS z dyskiem 50 GB
         docker run -d --name macos -p 8006:8006 --device=/dev/kvm --cap-add=NET_ADMIN -e DISK_SIZE=50G dockurr/macos
-        sudo apt-get update && sudo apt-get install tmate -y
-        tmate -S /tmp/tmate.sock new-session -d
-        tmate -S /tmp/tmate.sock wait tmate-ready
-        echo "=== DANE LOGOWANIA DO TWOJEJ MASZYNY ==="
-        tmate -S /tmp/tmate.sock display -p '#{tmate_web}'
-        echo "========================================"
-        sleep 21600
+        
+        # 2. Odczekanie 15 sekund na uruchomienie sieci wewnątrz Dockera
+        sleep 15
+        
+        # 3. Wygenerowanie klucza SSH (wymagane do bezpiecznego połączenia tunelowego)
+        ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
+        
+        # 4. Uruchomienie tunelu dla portu 8006 za pomocą localhost.run
+        echo "=== TWÓJ LINK DO PULPITU MACOS POJAWI SIĘ PONIŻEJ ==="
+        ssh -R 80:localhost:8006 nokey@localhost.run
